@@ -1,0 +1,221 @@
+/*
+    DR-API_win_x64_v2.1.1.exe
+    
+    作者: 邓瑞
+    网站: www.dengruicode.com
+    发布日期: 2024-08-06
+    版权声明: 未经授权禁止商用和二次开发,仅限于个人学习
+*/
+
+
+不同系统运行程序方法
+    win10 win11
+        双击 DR-API_win_x64_v2.1.exe
+
+    linux
+        cd /usr/local/workspace/
+        cd DR-API_Free2.1
+        ls -l
+        chmod 777 DR-API_linux_amd64_v2.1
+        ./DR-API_linux_amd64_v2.1
+
+        ufw allow 8008/tcp  
+
+    mac
+        cd ~/Desktop
+        cd DR-API_Free2.1
+        ls -l
+        chmod 777 DR-API_mac_amd64_v2.1
+        ./DR-API_mac_amd64_v2.1
+
+
+    注
+        DR-API_Free2.1 存放位置 (可设置其他位置)
+        mac
+            Desktop
+        linux
+            /usr/local/workspace/
+
+
+服务器默认监听80端口
+
+可自定义服务器监听端口 [ 配置后需重启软件 ]
+示例: 配置服务器监听端口为80 [ 修改 config.ini 中 port 的值为 8008 ]
+    http://127.0.0.1:8008/get
+
+db\cms.db 是SQLite数据库
+db\cms.zip 是备份的初始数据,若需要重置数据,可先删除cms.db,再重新解压cms.zip
+
+------------ 更新日志
+1.增加SQLite数据库 db\cms.db
+2.增加管理员、类别、文章、导航接口
+3.兼容 DR-API_v1.1 接口
+
+------------ 接口
+# v1.1
+------ get、post请求方式
+get请求
+    http://127.0.0.1/get
+
+post请求
+    http://127.0.0.1/post
+        #js请求示例: URLSearchParams 用于处理键值对类型的数据,并将其编码为url查询字符串
+        new URLSearchParams({
+            name: '邓瑞',
+            web: 'dengruicode.com',
+        })
+
+    http://127.0.0.1/postJson
+        #js请求示例: JSON.stringify 用于将对象转换为json字符串
+        JSON.stringify({
+            name: '邓瑞编程',
+            web: 'www.dengruicode.com',
+        })
+
+------ 项目实战(模拟数据)
+文章列表
+    请求url - 请求方式 [ get ]
+        http://127.0.0.1/article/get/all
+    返回结果
+        {
+            "data": [
+                {
+                    "id": 1,
+                    "name": "邓瑞",
+                    "title": "Vue3快速入门",
+                    "web": "dengruicode.com"
+                },
+                {
+                    "id": 2,
+                    "name": "邓瑞",
+                    "title": "Go项目实战",
+                    "web": "www.dengruicode.com"
+                },
+                {
+                    "id": 3,
+                    "name": "邓瑞",
+                    "title": "Ubuntu零基础入门",
+                    "web": "bilibili.com"
+                }
+            ],
+            "msg": "get请求",
+            "status": "success"
+        }
+
+获取文章
+    请求url - 请求方式 [ get ]
+        http://127.0.0.1/article/get/id/1
+    返回结果
+        {
+            "data": {
+                "id": 1,
+                "name": "邓瑞",
+                "title": "Vue3快速入门",
+                "web": "dengruicode.com"
+            },
+            "msg": "get请求",
+            "status": "success"
+        }
+
+    请求url - 请求方式 [ get ]
+        http://127.0.0.1/article/get/search/title/入门
+    返回结果
+        {
+            "data": [
+                {
+                    "id": 1,
+                    "name": "邓瑞",
+                    "title": "Vue3快速入门",
+                    "web": "dengruicode.com"
+                },
+                {
+                    "id": 3,
+                    "name": "邓瑞",
+                    "title": "Ubuntu零基础入门",
+                    "web": "bilibili.com"
+                }
+            ],
+            "msg": "get请求",
+            "status": "success"
+        }
+
+
+    请求url - 请求方式 [ post ]
+        http://127.0.0.1/article/postJson/search
+    返回结果
+        {
+            "data": [
+                {
+                    "id": 1,
+                    "name": "邓瑞",
+                    "title": "Vue3快速入门",
+                    "web": "dengruicode.com"
+                },
+                {
+                    "id": 3,
+                    "name": "邓瑞",
+                    "title": "Ubuntu零基础入门",
+                    "web": "bilibili.com"
+                }
+            ],
+            "msg": "post请求 [application/json]",
+            "status": "success"
+        }
+
+
+# v2.1
+------ 项目实战(SQLite数据库)
+管理员接口
+    获取管理员 - 请求方式 [get]
+        http://127.0.0.1/api/adm/getById?id=1
+
+    管理员列表 - 请求方式 [get]
+        http://127.0.0.1/api/adm/list
+
+    管理员登录 - 请求方式 [post]
+        http://127.0.0.1/api/adm/login
+        请求示例 [json]
+        {
+            "name": "DR",
+            "password": "123456"
+        }
+
+
+    添加管理员 - 请求方式 [post]
+        http://127.0.0.1/api/adm/add
+        请求示例 [json]
+        {
+            "name": "David",
+            "password": "123456",
+            "create_time": "2024-03-21 12:10:00"
+        }
+
+    (需授权)
+    编辑管理员 - 请求方式 [post]
+    删除管理员 - 请求方式 [post]
+    生成管理员密码 - 请求方式 [get]
+
+类别接口 (需授权)
+    类别列表 - 请求方式 [get]
+        http://127.0.0.1/api/category/list?id=1
+    获取类别 - 请求方式 [get]
+    添加类别 - 请求方式 [post]
+    编辑类别 - 请求方式 [post]
+    删除类别 - 请求方式 [post]
+
+文章接口 (需授权)
+    文章分页 - 请求方式 [get]
+    获取文章 - 请求方式 [get]
+    添加文章 - 请求方式 [post]
+    编辑文章 - 请求方式 [post]
+    删除文章 - 请求方式 [post]
+    上传图片 - 请求方式 [post]
+    上传图片(wangEditor) - 请求方式 [post]
+
+导航接口 (需授权)
+    导航列表 - 请求方式 [get]
+    导航树 - 请求方式 [get]
+    获取导航 - 请求方式 [get]
+    添加导航 - 请求方式 [post]
+    编辑导航 - 请求方式 [post]
+    删除导航 - 请求方式 [post]
